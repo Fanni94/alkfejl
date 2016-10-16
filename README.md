@@ -10,31 +10,25 @@ A program legfőbb célja, hogy jól átláthatóan megjelenítse a család, ill
 
 Funkcionális követelmények:
 
--   Regisztráció
+- Regisztráció
 
--   Bejelentkezés
+- Bejelentkezés
 
--   Regisztrált személy
+- Regisztrált személy
 
-<!-- -->
+    - Család regisztrálása
 
--   Család regisztrálása
+    - Kiadás/bevétel hozzáadása/törlése
 
--   Kiadás/bevétel hozzáadása/törlése
+    - Egyenleg megtekintése
 
--   Egyenleg megtekintése
+    - Kilépés
 
--   Kilépés
+- Családtag
 
-<!-- -->
+    - Családtag hozzáadása/törlése
 
--   Családtag
-
-<!-- -->
-
--   Családtag hozzáadása/törlése
-
--   Családi egyenleg megtekintése
+    - Családi egyenleg megtekintése
 
 Nem funkcionális követelmények:
 
@@ -44,21 +38,15 @@ Nem funkcionális követelmények:
 
 Használatieset-modell
 
--   Bejelentkezés nélkül elért oldalak
+- Bejelentkezés nélkül elért oldalak
 
-<!-- -->
+    - Bejelentkezés
 
--   Bejelentkezés
+- Bejelentkezéssel elért oldalak
 
-<!-- -->
+    - Családtag
 
--   Bejelentkezéssel elért oldalak
-
-<!-- -->
-
--   Családtag
-
--   Regisztrált személy
+    - Regisztrált személy
 
 **2. Tervezés**
 
