@@ -1,0 +1,21 @@
+{% extends 'master' %}
+
+{% block content %}
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">Család elkészítése</h3>
+    </div>
+    <div class="panel-body">
+      <form method="post">
+        {{ csrfField }}
+        <div class="form-group">
+          <label class="control-label" for="nev">Család név</label>
+          <input class="form-control" name="nev" id="nev" type="text" value="">
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Mentés</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
