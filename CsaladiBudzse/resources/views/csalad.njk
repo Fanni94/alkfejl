@@ -1,9 +1,22 @@
 {% extends 'master' %}
 
+{% block scripts %}
+  <script src="/scripts/egyenleg_timer.js"></script>
+{% endblock %}
+
 {% block content %}
   <script>
-    function OpenModal(tag_id, tag_name) {
-        //TODO: show jogosultsag to modal
+    function OpenModal(tag_id, tag_name, jogosultsagok) {
+
+      $("#jogosultsag_form input:checkbox").each(function() {
+        $(this).prop("checked", false); // do your staff with each checkbox
+      });
+
+      jogosultsagok.forEach(function(jog) {
+        var checkbox_id = "#jog_" + jog.id;
+        $(checkbox_id).prop("checked", true);
+      });
+
       $("#modal").modal("show");
       $("#modal_user_name").text(tag_name);
       $("#modal_user_id").val(tag_id);
@@ -18,11 +31,12 @@
       Küldd ezt a linket a családtagodnak: <a href="#">http://localhost:3000/csalad/join/{{ csalad.reg_link }}</a>
     </div>
   </div>
+  <span class="help-block"></span>
   <div class="panel panel-info">
     <div class="panel-heading">
       <h3 class="panel-title">Család egyenleg</h3>
     </div>
-    <div class="panel-body">
+    <div id="csaladi-egyenleg" class="panel-body">
       {% set egyenleg = 0 %}
       {% for tag in csalad.tagok %}
         {% for koltseg in tag.koltsegek %}
@@ -43,7 +57,7 @@
     {% for tag in csalad.tagok %}
       <tr class="info">
       <td>{{ tag.lastname }} {{ tag.firstname }}</td>
-      <td><a href="#" onclick="OpenModal({{ tag.id }}, '{{ tag.lastname }} {{ tag.firstname }}')" class="btn btn-default">Jogosultság</a><a href="/csalad/{{ tag.id }}/delete" class="btn btn-default">Törlés</a></td>
+      <td><a href="#" onclick="OpenModal({{ tag.id }}, '{{ tag.lastname }} {{ tag.firstname }}', {{ tag.jogosultsagok | dump }})" class="btn btn-default">Jogosultság</a><a href="/csalad/{{ tag.id }}/delete" class="btn btn-default">Törlés</a></td>
       </tr>
     {% endfor %}
     </tbody>
@@ -55,7 +69,7 @@
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title">Jogosultságok szerkesztése</h4>
         </div>
-        <form action="/csalad/jogosultsag" method="post">
+        <form action="/csalad/jogosultsag" method="post" id="jogosultsag_form">
           {{ csrfField }}
           <input type="hidden" name="modal_user_id" id="modal_user_id">
           <div class="modal-body">

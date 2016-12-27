@@ -22,7 +22,25 @@ class BudzseController {
       koltsegek : koltseg
     })
   }
+  * ajaxDeleteKoltseg(request, response) {
 
+    const id = request.param('id');
+    const koltseg = yield Koltseg.find(id);
+
+    if(koltseg) {
+      if (request.currentUser.id !== koltseg.user_id) {
+        response.unauthorized('Access denied.')
+        return
+      }
+
+    yield koltseg.delete()
+      response.ok({
+        success: true
+      })
+      return
+    }
+    response.notFound('Nincs ilyen költség')
+  }
   * deleteKoltseg (request, response) {
     const id = request.param('id');
     const koltseg = yield Koltseg.find(id);
@@ -34,6 +52,21 @@ class BudzseController {
 
     yield koltseg.delete()
     response.redirect('/egyenleg')
+  }
+
+  * ajaxSearchKoltseg (request, response) {
+    var mire_darab = request.param('mire')
+
+    const koltsegek = yield Koltseg.query()
+      .where('mire', 'LIKE', `%${mire_darab}%`).fetch()
+
+    response.ok({
+      mire_items: koltsegek.toJSON().map(function (el) {
+        return {
+          name : el.mire
+        }
+      })
+    })
   }
 
   * koltsegFeldolgozas(request, response) {

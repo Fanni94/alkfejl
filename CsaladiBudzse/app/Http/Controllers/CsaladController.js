@@ -63,9 +63,9 @@ class CsaladController {
   }
 
   * jogosultsag (request, response) {
-
     var user_id = request.input('modal_user_id')
-    console.log(user_id)
+    const jogosultsagok_uj = request.except('_csrf', 'modal_user_id');
+
     const user = yield User.findBy('id', user_id)
 
     if(user.csalad_id != request.currentUser.csalad_id) {
@@ -73,7 +73,34 @@ class CsaladController {
       return
     }
 
+    var values = Object.keys(jogosultsagok_uj).map(function(key){
+      return parseInt(jogosultsagok_uj[key]);
+    });
+
+    yield user.jogosultsagok().sync(values)
+
     response.redirect('/csalad')
+  }
+
+  * ajaxEgyenleg (request, response) {
+    if(request.currentUser.csalad_id == null) {
+      response.unauthorized('Nem megfelelő családba tartozol.')
+      return
+    }
+
+    const csalad = yield Csalad.query()
+      .where('id', request.currentUser.csalad_id).with('tagok', 'tagok.koltsegek').first()
+    const csalad_json = csalad.toJSON()
+    var egyenleg = 0
+    for(let tag_idx in csalad_json.tagok) {
+      for(let koltseg_idx in csalad_json.tagok[tag_idx].koltsegek) {
+        egyenleg += csalad_json.tagok[tag_idx].koltsegek[koltseg_idx].osszeg
+      }
+    }
+
+    response.ok({
+      csaladEgyenleg: egyenleg
+    })
   }
 
   * createFeldolgozas (request, response) {

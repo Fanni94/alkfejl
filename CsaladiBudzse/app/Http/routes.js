@@ -17,11 +17,10 @@
 
 const Route = use('Route')
 
-
+Route.get('/', 'BudzseController.index')
 Route.get('/egyenleg', 'BudzseController.egyenleg').middleware('auth')
 Route.post('/egyenleg', 'BudzseController.koltsegFeldolgozas').middleware('auth')
 Route.get('/egyenleg/:id/delete', 'BudzseController.deleteKoltseg').middleware('auth')
-Route.get('/', 'BudzseController.index')
 
 Route.get('/csalad', 'CsaladController.index').middleware('auth')
 Route.get('/csalad/join/:id', 'CsaladController.join').middleware('auth')
@@ -35,3 +34,9 @@ Route.get('/login', 'UserController.login')
 Route.post('/register', 'UserController.doRegister')
 Route.post('/login', 'UserController.doLogin')
 Route.get('/logout', 'UserController.doLogout')
+
+Route.group('ajax', function () {
+  Route.delete('/egyenleg/:id/delete', 'BudzseController.ajaxDeleteKoltseg').middleware('auth')
+  Route.get('/csalad/egyenleg', 'CsaladController.ajaxEgyenleg').middleware('auth')
+  Route.get('/egyenleg/search/:mire', 'BudzseController.ajaxSearchKoltseg')
+}).prefix('/ajax')
